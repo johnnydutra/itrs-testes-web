@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import base.BaseTests;
 import org.junit.jupiter.api.Test;
+import pages.LoginPage;
 import pages.ProductPage;
 
 public class HomePageTests extends BaseTests {
@@ -34,6 +35,15 @@ public class HomePageTests extends BaseTests {
         assertThat(productNameOnHomePage.toUpperCase(), is(productNameOnProductPage.toUpperCase()));
         assertThat(productPriceOnHomePage, is(productPriceOnProductPage));
 
+    }
+
+    @Test
+    public void testSuccessfulLogin_userLogged() {
+        LoginPage loginPage = homePage.clickSignInButton();
+        loginPage.fillEmail("testy.mctester154@gmail.com");
+        loginPage.fillPassword("abcd1234");
+        loginPage.clickSignInButton();
+        assertThat(homePage.isUserLogged("Testy McTester"), is(true));
     }
 
 }

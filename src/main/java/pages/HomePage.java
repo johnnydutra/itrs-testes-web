@@ -17,6 +17,7 @@ public class HomePage {
     private By productDescriptions = By.cssSelector(".product-description a");
     private By productPrices = By.className("price");
     private By cartItemsText = By.className("cart-products-count");
+    private By signInButton = By.cssSelector("#_desktop_user_info span.hidden-sm-down");
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
@@ -50,6 +51,15 @@ public class HomePage {
     public ProductPage clickProduct(int index) {
         driver.findElements(productDescriptions).get(index).click();
         return new ProductPage(driver);
+    }
+
+    public LoginPage clickSignInButton() {
+        driver.findElement(signInButton).click();
+        return new LoginPage(driver);
+    }
+
+    public boolean isUserLogged(String username) {
+        return username.contentEquals(driver.findElement(signInButton).getText());
     }
 
 }
