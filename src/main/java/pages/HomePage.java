@@ -14,6 +14,8 @@ public class HomePage {
     List<WebElement> productList = new ArrayList<>();
 
     private By products = By.className("product-description");
+    private By productDescriptions = By.cssSelector(".product-description a");
+    private By productPrices = By.className("price");
     private By cartItemsText = By.className("cart-products-count");
 
     public HomePage(WebDriver driver) {
@@ -37,5 +39,17 @@ public class HomePage {
         return cartItemsQtyNumber;
     }
 
+    public String getProductName(int index) {
+        return driver.findElements(productDescriptions).get(index).getText();
+    }
+
+    public String getProductPrice(int index) {
+        return driver.findElements(productPrices).get(index).getText();
+    }
+
+    public ProductPage clickProduct(int index) {
+        driver.findElements(productDescriptions).get(index).click();
+        return new ProductPage(driver);
+    }
 
 }

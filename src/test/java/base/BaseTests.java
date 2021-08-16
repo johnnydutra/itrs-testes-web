@@ -14,7 +14,7 @@ public class BaseTests {
 
     @BeforeAll
     public static void setUp() {
-        System.setProperty("webdriver.chrome.driver", "C:\\training\\itrs-testes-web\\src\\test\\resources\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "C:\\training\\irts-testes-web\\src\\test\\resources\\chromedriver.exe");
         driver = new ChromeDriver();
     }
 
