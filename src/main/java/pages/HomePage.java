@@ -18,6 +18,7 @@ public class HomePage {
     private By productPrices = By.className("price");
     private By cartItemsText = By.className("cart-products-count");
     private By signInButton = By.cssSelector("#_desktop_user_info span.hidden-sm-down");
+    private By signOutButton = By.cssSelector("a.logout");
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
@@ -60,6 +61,10 @@ public class HomePage {
 
     public boolean isUserLogged(String username) {
         return username.contentEquals(driver.findElement(signInButton).getText());
+    }
+
+    public void clickSignOutButton() {
+        driver.findElement(signOutButton).click();
     }
 
 }

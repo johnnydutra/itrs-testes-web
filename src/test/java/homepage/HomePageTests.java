@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import base.BaseTests;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import pages.*;
 import util.Functions;
 
@@ -59,6 +61,31 @@ public class HomePageTests extends BaseTests {
         assertThat(homePage.isUserLogged("Testy McTester"), is(true));
         loadHomePage();
     }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/testData_Login.csv", numLinesToSkip = 1, delimiter = ';')
+    public void testLogin_userLoggedWithValidData(String testName, String email, String password, String userName, String result) {
+        loginPage = homePage.clickSignInButton();
+        loginPage.fillEmail(email);
+        loginPage.fillPassword(password);
+        loginPage.clickSignInButton();
+
+        boolean isAbleToLogin;
+        if (result.equals("pass")) {
+            isAbleToLogin = true;
+        } else {
+            isAbleToLogin = false;
+        }
+
+        assertThat(homePage.isUserLogged(userName), is(isAbleToLogin));
+
+        if (isAbleToLogin) {
+            homePage.clickSignOutButton();
+        }
+
+        loadHomePage();
+    }
+
 
     @Test
     public void testAddProductToCart_ProductAddedToCart() {

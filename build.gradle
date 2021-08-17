@@ -14,7 +14,9 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
     testImplementation 'org.hamcrest:hamcrest:2.2'
-
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.0'
+    implementation 'io.cucumber:cucumber-java:6.1.2'
+    testImplementation 'io.cucumber:cucumber-junit:6.1.2'
 }
 
 test {

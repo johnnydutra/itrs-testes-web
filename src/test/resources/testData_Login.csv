@@ -1,0 +1,3 @@
+testName;email;password;userName;result
+successfulLogin;testy.mctester154@gmail.com;abcd1234;Testy McTester;pass
+invalidLogin;testy.mctester154@gmail.com;test1234;Testy McTester;fail
