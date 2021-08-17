@@ -6,10 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import base.BaseTests;
 import org.junit.jupiter.api.Test;
-import pages.CartPage;
-import pages.LoginPage;
-import pages.ProductModalPage;
-import pages.ProductPage;
+import pages.*;
 import util.Functions;
 
 import java.util.List;
@@ -20,6 +17,8 @@ public class HomePageTests extends BaseTests {
     LoginPage loginPage;
     ProductModalPage productModalPage;
     CartPage cartPage;
+    CheckoutPage checkoutPage;
+    ConfirmationPage confirmationPage;
 
     @Test
     public void testCountProducts_eightDifferentProducts() {
@@ -120,7 +119,7 @@ public class HomePageTests extends BaseTests {
     Double expected_afterTaxTotal = expected_beforeTaxTotal + expected_taxes;
 
     @Test
-    public void goToCheckout_PersistedOrderData() {
+    public void goToCart_PersistedOrderData() {
         addProductToCart_ProductAddedToCart();
         cartPage = productModalPage.clickProceedToCheckout();
 
@@ -136,11 +135,51 @@ public class HomePageTests extends BaseTests {
         assertThat(Functions.removeCurrencySignAndCastToDouble(cartPage.getBeforeTaxTotalText()), is(expected_beforeTaxTotal));
         assertThat(Functions.removeCurrencySignAndCastToDouble(cartPage.getAfterTaxTotalText()), is(expected_afterTaxTotal));
         assertThat(Functions.removeCurrencySignAndCastToDouble(cartPage.getTaxesText()), is(expected_taxes));
-
-
-
     }
 
+    String expected_customerName = "Testy McTester";
+    Double expected_shippingCostCarrier = 7.00;
+
+    @Test
+    public void goToCheckout_ShippingPaymentAddressListed() {
+        goToCart_PersistedOrderData();
+
+        checkoutPage = cartPage.clickProceedToCheckoutButton();
+
+        assertThat(Functions.removeCurrencySignAndCastToDouble(checkoutPage.getTotalPriceAfterTax()), is(expected_afterTaxTotal));
+        assertTrue(checkoutPage.getCustomerName().startsWith(expected_customerName));
+
+        checkoutPage.clickContinueAddressButton();
+
+        String actual_shippingCostCarrierText = checkoutPage.getShippingCostCarrier();
+        actual_shippingCostCarrierText = Functions.removeSubstring(actual_shippingCostCarrierText, " tax excl.");
+        Double actual_shippingCostCarrier = Functions.removeCurrencySignAndCastToDouble(actual_shippingCostCarrierText);
+
+        assertThat(actual_shippingCostCarrier, is (expected_shippingCostCarrier));
+
+        checkoutPage.clickContinueShippingButton();
+        checkoutPage.selectPayByCheck();
+
+        Double actual_payByCheckAmount = Functions.removeCurrencySignAndCastToDouble(Functions.removeSubstring(checkoutPage.getAmountPayByCheck(), " (tax incl.)"));
+        assertThat(actual_payByCheckAmount, is(expected_afterTaxTotal));
+
+        checkoutPage.switchAgreementCheckbox();
+        assertTrue(checkoutPage.isAgreementBoxChecked());
+    }
+
+    @Test
+    public void completeOrder_orderCompletedSuccessfully() {
+        goToCheckout_ShippingPaymentAddressListed();
+        confirmationPage = checkoutPage.clickConfirmOrderButton();
+
+        assertTrue(confirmationPage.getConfirmationPageHeader().endsWith("YOUR ORDER IS CONFIRMED"));
+
+        assertThat(confirmationPage.getUserEmail(), is("testy.mctester154@gmail.com"));
+        assertThat(confirmationPage.getSubtotal(), is(expected_orderSubtotal));
+        assertThat(confirmationPage.getOrderTotal(), is(expected_afterTaxTotal));
+        assertThat(confirmationPage.getPaymentMethod(), is("Payments by check"));
+
+    }
 
 
 }

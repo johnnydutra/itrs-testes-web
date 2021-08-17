@@ -11,4 +11,9 @@ public class Functions {
         text = text.replace(" items", "");
         return Integer.parseInt(text);
     }
+
+    public static String removeSubstring(String str, String subStr) {
+        str = str.replace(subStr, "");
+        return str;
+    }
 }

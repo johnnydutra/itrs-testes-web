@@ -21,6 +21,8 @@ public class CartPage {
     private By afterTaxTotal = By.cssSelector("div.cart-summary-totals div.cart-summary-line:nth-child(2) span.value");
     private By taxes = By.cssSelector("div.cart-summary-totals div.cart-summary-line:nth-child(3) span.value");
 
+    private By proceedToCheckoutButton = By.cssSelector("a.btn-primary");
+
     public CartPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -71,6 +73,11 @@ public class CartPage {
 
     public String getTaxesText() {
         return driver.findElement(taxes).getText();
+    }
+
+    public CheckoutPage clickProceedToCheckoutButton() {
+        driver.findElement(proceedToCheckoutButton).click();
+        return new CheckoutPage(driver);
     }
 
 
