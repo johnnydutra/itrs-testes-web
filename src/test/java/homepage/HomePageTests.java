@@ -21,13 +21,13 @@ public class HomePageTests extends BaseTests {
     ConfirmationPage confirmationPage;
 
     @Test
-    public void testCountProducts_eightDifferentProducts() {
+    public void testCountProducts_EightDifferentProducts() {
         loadHomePage();
         assertThat(homePage.countProducts(), is(8));
     }
 
     @Test
-    public void testValidateEmptyCart_zeroItemsInCart() {
+    public void testValidateEmptyCart_ZeroItemsInCart() {
         int itemsInCart = homePage.getItemsInCartQuantity();
         assertThat(itemsInCart, is(0));
     }
@@ -36,7 +36,7 @@ public class HomePageTests extends BaseTests {
     String productPriceOnProductPage;
 
     @Test
-    public void testValidateProductDetails_matchingDescriptionAndPrice() {
+    public void testValidateProductDetails_MatchingDescriptionAndPrice() {
         int index = 0;
         String productNameOnHomePage = homePage.getProductName(index);
         String productPriceOnHomePage = homePage.getProductPrice(index);
@@ -51,7 +51,7 @@ public class HomePageTests extends BaseTests {
     }
 
     @Test
-    public void testSuccessfulLogin_userLogged() {
+    public void testSuccessfulLogin_UserLogged() {
         loginPage = homePage.clickSignInButton();
         loginPage.fillEmail("testy.mctester154@gmail.com");
         loginPage.fillPassword("abcd1234");
@@ -61,15 +61,15 @@ public class HomePageTests extends BaseTests {
     }
 
     @Test
-    public void addProductToCart_ProductAddedToCart() {
+    public void testAddProductToCart_ProductAddedToCart() {
         String productSize = "M";
         String productColor = "Black";
         int productQty = 2;
 
         if (!homePage.isUserLogged("Testy McTester")) {
-            testSuccessfulLogin_userLogged();
+            testSuccessfulLogin_UserLogged();
         }
-        testValidateProductDetails_matchingDescriptionAndPrice();
+        testValidateProductDetails_MatchingDescriptionAndPrice();
 
         List<String> sizeList = productPage.getSelectedSize();
         System.out.println(sizeList.get(0));
@@ -119,8 +119,8 @@ public class HomePageTests extends BaseTests {
     Double expected_afterTaxTotal = expected_beforeTaxTotal + expected_taxes;
 
     @Test
-    public void goToCart_PersistedOrderData() {
-        addProductToCart_ProductAddedToCart();
+    public void testGoToCart_PersistedOrderData() {
+        testAddProductToCart_ProductAddedToCart();
         cartPage = productModalPage.clickProceedToCheckout();
 
         assertThat(cartPage.getProductName(), is(expected_productName));
@@ -141,8 +141,8 @@ public class HomePageTests extends BaseTests {
     Double expected_shippingCostCarrier = 7.00;
 
     @Test
-    public void goToCheckout_ShippingPaymentAddressListed() {
-        goToCart_PersistedOrderData();
+    public void testGoToCheckout_ShippingPaymentAddressListed() {
+        testGoToCart_PersistedOrderData();
 
         checkoutPage = cartPage.clickProceedToCheckoutButton();
 
@@ -168,8 +168,8 @@ public class HomePageTests extends BaseTests {
     }
 
     @Test
-    public void completeOrder_orderCompletedSuccessfully() {
-        goToCheckout_ShippingPaymentAddressListed();
+    public void testCompleteOrder_OrderCompletedSuccessfully() {
+        testGoToCheckout_ShippingPaymentAddressListed();
         confirmationPage = checkoutPage.clickConfirmOrderButton();
 
         assertTrue(confirmationPage.getConfirmationPageHeader().endsWith("YOUR ORDER IS CONFIRMED"));

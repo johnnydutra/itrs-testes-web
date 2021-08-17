@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pages.HomePage;
 
+import java.util.concurrent.TimeUnit;
+
 public class BaseTests {
 
     private static WebDriver driver;
@@ -16,6 +18,7 @@ public class BaseTests {
     public static void setUp() {
         System.setProperty("webdriver.chrome.driver", "C:\\training\\irts-testes-web\\src\\test\\resources\\chromedriver.exe");
         driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
 
     @BeforeEach
